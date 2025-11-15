@@ -1,21 +1,34 @@
+import { useContext } from "react";
+
+// material-ui
+import List from "@mui/material/List";
+
 // project imports
-import NavCard from './NavCard';
-import Navigation from './Navigation';
-import SimpleBar from 'components/third-party/SimpleBar';
-import { useGetMenuMaster } from 'api/menu';
+import { ConfigContext } from "contexts/ConfigContext";
 
-// ==============================|| DRAWER CONTENT ||============================== //
+// menu items
+import menuItems from "menu-items";
 
-export default function DrawerContent() {
-  const { menuMaster } = useGetMenuMaster();
-  const drawerOpen = menuMaster.isDashboardDrawerOpened;
+// NavItem (free version ใช้อันนี้)
+import NavItem from "../NavItem";
+
+const DrawerContent = () => {
+  const { state } = useContext(ConfigContext); // กัน error เวลา header ใช้ drawer state
 
   return (
-    <>
-      <SimpleBar sx={{ '& .simplebar-content': { display: 'flex', flexDirection: 'column' } }}>
-        <Navigation />
-        {drawerOpen && <NavCard />}
-      </SimpleBar>
-    </>
+    <List
+      component="nav"
+      sx={{
+        px: 1,
+        mt: 2,
+        overflowY: "auto",
+      }}
+    >
+      {menuItems.items.map((item) => (
+        <NavItem key={item.id} item={item} />
+      ))}
+    </List>
   );
-}
+};
+
+export default DrawerContent;

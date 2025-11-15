@@ -1,56 +1,36 @@
 import { lazy } from 'react';
-
-// project imports
+import { Navigate } from 'react-router-dom';
 import Loadable from 'components/Loadable';
 import DashboardLayout from 'layout/Dashboard';
 
-// render- Dashboard
+// ---- Pages ----
+
+// Dashboard หน้าหลัก path = src/pages/dashboard/default/index.jsx
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard/default')));
 
-// render - color
-const Color = Loadable(lazy(() => import('pages/component-overview/color')));
-const Typography = Loadable(lazy(() => import('pages/component-overview/typography')));
-const Shadow = Loadable(lazy(() => import('pages/component-overview/shadows')));
+// FIFO ที่มึงสร้าง
+import FIFOPage from 'pages/fifo/FIFOPage';
 
-// render - sample page
-const SamplePage = Loadable(lazy(() => import('pages/extra-pages/sample-page')));
-
-// ==============================|| MAIN ROUTING ||============================== //
+// ---- Router Object ----
 
 const MainRoutes = {
-  path: '/',
-  element: <DashboardLayout />,
-  children: [
-    {
-      path: '/',
-      element: <DashboardDefault />
-    },
-    {
-      path: 'dashboard',
-      children: [
+    path: '/',
+    element: <DashboardLayout />,
+    children: [
+        // 👇 ตัวนี้เพิ่มเข้ามาให้ default redirect ไป /fifo
         {
-          path: 'default',
-          element: <DashboardDefault />
+            path: '',
+            element: <Navigate to="/fifo" replace />
+        },
+        {
+            path: 'dashboard',
+            element: <DashboardDefault />
+        },
+        {
+            path: 'fifo',
+            element: <FIFOPage />
         }
-      ]
-    },
-    {
-      path: 'typography',
-      element: <Typography />
-    },
-    {
-      path: 'color',
-      element: <Color />
-    },
-    {
-      path: 'shadow',
-      element: <Shadow />
-    },
-    {
-      path: 'sample-page',
-      element: <SamplePage />
-    }
-  ]
+    ]
 };
 
 export default MainRoutes;

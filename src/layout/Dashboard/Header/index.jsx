@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useContext } from 'react';
 
 // material-ui
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -10,46 +10,49 @@ import AppBarStyled from './AppBarStyled';
 import HeaderContent from './HeaderContent';
 import IconButton from 'components/@extended/IconButton';
 
-import { handlerDrawerOpen, useGetMenuMaster } from 'api/menu';
+// context
+import { ConfigContext } from 'contexts/ConfigContext';
+
+// config
 import { DRAWER_WIDTH, MINI_DRAWER_WIDTH } from 'config';
 
 // assets
 import MenuFoldOutlined from '@ant-design/icons/MenuFoldOutlined';
 import MenuUnfoldOutlined from '@ant-design/icons/MenuUnfoldOutlined';
 
-// ==============================|| MAIN LAYOUT - HEADER ||============================== //
-
 export default function Header() {
   const downLG = useMediaQuery((theme) => theme.breakpoints.down('lg'));
 
-  const { menuMaster } = useGetMenuMaster();
-  const drawerOpen = menuMaster.isDashboardDrawerOpened;
+  // ใช้ config context ที่มีจริงในโปรเจกต์
+  const { state, setState } = useContext(ConfigContext);
 
-  // header content
+  // drawer toggle
+  const drawerOpen = state.opened;
+  const toggleDrawer = () => setState({ ...state, opened: !drawerOpen });
+
   const headerContent = useMemo(() => <HeaderContent />, []);
 
-  // common header
   const mainHeader = (
     <Toolbar>
       <IconButton
         aria-label="open drawer"
-        onClick={() => handlerDrawerOpen(!drawerOpen)}
+        onClick={toggleDrawer}
         edge="start"
         color="secondary"
         variant="light"
-        sx={(theme) => ({
+        sx={{
           color: 'text.primary',
           bgcolor: drawerOpen ? 'transparent' : 'grey.100',
           ml: { xs: 0, lg: -2 }
-        })}
+        }}
       >
         {!drawerOpen ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
       </IconButton>
+
       {headerContent}
     </Toolbar>
   );
 
-  // app-bar params
   const appBar = {
     position: 'fixed',
     color: 'inherit',
@@ -58,7 +61,12 @@ export default function Header() {
       borderBottom: '1px solid',
       borderBottomColor: 'divider',
       zIndex: 1200,
-      width: { xs: '100%', lg: drawerOpen ? `calc(100% - ${DRAWER_WIDTH}px)` : `calc(100% - ${MINI_DRAWER_WIDTH}px)` }
+      width: {
+        xs: '100%',
+        lg: drawerOpen
+          ? `calc(100% - ${DRAWER_WIDTH}px)`
+          : `calc(100% - ${MINI_DRAWER_WIDTH}px)`
+      }
     }
   };
 

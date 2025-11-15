@@ -1,63 +1,62 @@
-import PropTypes from 'prop-types';
-import { useMemo } from 'react';
+import { useContext } from 'react';
 
-import useMediaQuery from '@mui/material/useMediaQuery';
+// material-ui
 import Drawer from '@mui/material/Drawer';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import Box from '@mui/material/Box';
 
-// project imports
-import DrawerHeader from './DrawerHeader';
+// project
+import { ConfigContext } from 'contexts/ConfigContext';
+import { DRAWER_WIDTH, MINI_DRAWER_WIDTH } from 'config';
+
+// drawer content
 import DrawerContent from './DrawerContent';
-import MiniDrawerStyled from './MiniDrawerStyled';
 
-import { DRAWER_WIDTH } from 'config';
-import { handlerDrawerOpen, useGetMenuMaster } from 'api/menu';
-
-// ==============================|| MAIN LAYOUT - DRAWER ||============================== //
-
-export default function MainDrawer({ window }) {
-  const { menuMaster } = useGetMenuMaster();
-  const drawerOpen = menuMaster.isDashboardDrawerOpened;
+export default function MainDrawer() {
   const downLG = useMediaQuery((theme) => theme.breakpoints.down('lg'));
+  const { state, setState } = useContext(ConfigContext);
 
-  // responsive drawer container
-  const container = window !== undefined ? () => window().document.body : undefined;
+  const drawerOpen = state.opened;
 
-  // header content
-  const drawerContent = useMemo(() => <DrawerContent />, []);
-  const drawerHeader = useMemo(() => <DrawerHeader open={drawerOpen} />, [drawerOpen]);
+  const handleDrawerToggle = () => {
+    setState({ ...state, opened: !drawerOpen });
+  };
 
   return (
-    <Box component="nav" sx={{ flexShrink: { md: 0 }, zIndex: 1200 }} aria-label="mailbox folders">
+    <>
+      {/* Desktop Drawer */}
       {!downLG ? (
-        <MiniDrawerStyled variant="permanent" open={drawerOpen}>
-          {drawerHeader}
-          {drawerContent}
-        </MiniDrawerStyled>
-      ) : (
         <Drawer
-          container={container}
-          variant="temporary"
+          variant="persistent"
           open={drawerOpen}
-          onClose={() => handlerDrawerOpen(!drawerOpen)}
-          ModalProps={{ keepMounted: true }}
+          onClose={handleDrawerToggle}
           sx={{
-            display: { xs: drawerOpen ? 'block' : 'none', lg: 'none' },
+            width: drawerOpen ? DRAWER_WIDTH : MINI_DRAWER_WIDTH,
+            flexShrink: 0,
             '& .MuiDrawer-paper': {
-              boxSizing: 'border-box',
-              width: DRAWER_WIDTH,
-              borderRight: '1px solid',
-              borderRightColor: 'divider',
-              boxShadow: 'inherit'
+              width: drawerOpen ? DRAWER_WIDTH : MINI_DRAWER_WIDTH,
+              transition: '0.3s ease'
             }
           }}
         >
-          {drawerHeader}
-          {drawerContent}
+          <DrawerContent />
+        </Drawer>
+      ) : (
+        /* Mobile */
+        <Drawer
+          variant="temporary"
+          open={drawerOpen}
+          onClose={handleDrawerToggle}
+          ModalProps={{ keepMounted: true }}
+          sx={{
+            '& .MuiDrawer-paper': {
+              width: DRAWER_WIDTH
+            }
+          }}
+        >
+          <DrawerContent />
         </Drawer>
       )}
-    </Box>
+    </>
   );
 }
-
-MainDrawer.propTypes = { window: PropTypes.func };

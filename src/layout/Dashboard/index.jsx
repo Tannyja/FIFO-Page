@@ -1,53 +1,42 @@
-import { useEffect } from 'react';
+// src/layout/Dashboard/index.jsx
+
 import { Outlet } from 'react-router-dom';
+import { ConfigProvider } from 'contexts/ConfigContext';
 
-import useMediaQuery from '@mui/material/useMediaQuery';
-import Toolbar from '@mui/material/Toolbar';
-import Box from '@mui/material/Box';
-
-// project imports
-import Drawer from './Drawer';
-import Header from './Header';
-import Footer from './Footer';
-import Loader from 'components/Loader';
-import Breadcrumbs from 'components/@extended/Breadcrumbs';
-
-import { handlerDrawerOpen, useGetMenuMaster } from 'api/menu';
-
-// ==============================|| MAIN LAYOUT ||============================== //
-
-export default function DashboardLayout() {
-  const { menuMasterLoading } = useGetMenuMaster();
-  const downXL = useMediaQuery((theme) => theme.breakpoints.down('xl'));
-
-  // set media wise responsive drawer
-  useEffect(() => {
-    handlerDrawerOpen(!downXL);
-  }, [downXL]);
-
-  if (menuMasterLoading) return <Loader />;
-
+const DashboardLayout = () => {
   return (
-    <Box sx={{ display: 'flex', width: '100%' }}>
-      <Header />
-      <Drawer />
+    <ConfigProvider>
+      <div
+        style={{
+          minHeight: '100%',
+          width: '100%',
+          margin: 0,
+          padding: 0,
+          overflowX: 'hidden',
+          overflowY: 'visible',
 
-      <Box component="main" sx={{ width: 'calc(100% - 260px)', flexGrow: 1, p: { xs: 2, sm: 3 } }}>
-        <Toolbar sx={{ mt: 'inherit' }} />
-        <Box
-          sx={{
-            ...{ px: { xs: 0, sm: 2 } },
-            position: 'relative',
-            minHeight: 'calc(100vh - 110px)',
-            display: 'flex',
-            flexDirection: 'column'
+          background: `
+            radial-gradient(circle at top left, #4f46e5 0, #020617 45%),
+            radial-gradient(circle at bottom right, #0f766e 0, #020617 50%)
+          `,
+          backgroundAttachment: 'fixed',
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat'
+        }}
+      >
+        <main
+          style={{
+            minHeight: 'auto',
+            width: '100%',
+            margin: 0,
+            padding: 0
           }}
         >
-          <Breadcrumbs />
           <Outlet />
-          <Footer />
-        </Box>
-      </Box>
-    </Box>
+        </main>
+      </div>
+    </ConfigProvider>
   );
-}
+};
+
+export default DashboardLayout;

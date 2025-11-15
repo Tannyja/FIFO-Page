@@ -1,0 +1,106 @@
+/* Background */
+.fifo-container {
+  padding: 40px;
+  background: #0d0f15;
+  color: white;
+  min-height: 100vh;
+}
+
+/* Title */
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 25px;
+  color: #8ab4ff;
+}
+
+/* Input card */
+.input-card {
+  display: flex;
+  gap: 25px;
+  padding: 20px;
+  background: #161a23;
+  border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  margin-bottom: 30px;
+}
+
+.input-block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.input-block label {
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+/* Inputs */
+input[type=file], select {
+  padding: 10px;
+  background: #20242e;
+  border: 1px solid #3a3f4d;
+  border-radius: 8px;
+  color: white;
+}
+
+.file-name {
+  opacity: 0.7;
+  font-size: 12px;
+}
+
+/* Neon Button */
+.run-btn {
+  height: 42px;
+  padding: 0 20px;
+  background: linear-gradient(90deg, #835bff, #4ac6ff);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: auto;
+  box-shadow: 0 0 12px #835bff;
+  transition: .2s;
+}
+
+.run-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 18px #9c72ff;
+}
+
+/* Result card */
+.result-card {
+  background: #161a23;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+/* Table */
+.result-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.result-table th {
+  text-align: left;
+  padding: 10px 0;
+  border-bottom: 1px solid #2a2f3b;
+}
+
+.result-table td {
+  padding: 8px 0;
+  border-bottom: 1px solid #222631;
+}
+
+.hit {
+  color: #39ff88;
+}
+
+.fault {
+  color: #ff5f76;
+}
